@@ -1,6 +1,6 @@
 module Ai
-    class AiGateway
-      def self.call(instruction:, system_prompt:, context:)
+  class AiGateway
+    def self.call(instruction:, system_prompt:, context:)
         api_key = Rails.application.credentials.openai&.api_key
         raise "OpenAI API key not configured in Rails credentials" unless api_key
 

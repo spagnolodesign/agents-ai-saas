@@ -1,21 +1,36 @@
 namespace :workflow do
-  desc "Test workflow system with mocked AI"
+  desc "Test workflow system with mocked AI (use USE_REAL_API=true to use real GPT API)"
   task test: :environment do
     puts "=" * 80
     puts "WORKFLOW SYSTEM TEST"
     puts "=" * 80
     puts
 
+    use_real_api = ENV["USE_REAL_API"] == "true"
+
+    if use_real_api
+      puts "⚠️  WARNING: Using REAL GPT API - this will incur costs!"
+      puts "   Make sure OPENAI_API_KEY is configured in Rails credentials"
+      puts "   Press Ctrl+C within 5 seconds to cancel..."
+      sleep 5
+      puts
+    else
+      puts "ℹ️  Using MOCKED AI (set USE_REAL_API=true to use real GPT API)"
+      puts
+    end
+
     # Store original AiGateway method
     original_ai_gateway = Ai::AiGateway.method(:call)
 
     begin
-      # Mock AiGateway to return structured JSON
-      Ai::AiGateway.define_singleton_method(:call) do |instruction:, system_prompt:, context:|
-        {
-          "reply" => "Hello!",
-          "data" => { "name" => "John" }
-        }.to_json
+      unless use_real_api
+        # Mock AiGateway to return structured JSON
+        Ai::AiGateway.define_singleton_method(:call) do |instruction:, system_prompt:, context:|
+          {
+            "reply" => "Hello!",
+            "data" => { "name" => "John" }
+          }.to_json
+        end
       end
 
       puts "📦 Creating test data..."
@@ -170,10 +185,13 @@ namespace :workflow do
       puts "=" * 80
 
     ensure
-      # Restore original AiGateway method
-      Ai::AiGateway.define_singleton_method(:call, original_ai_gateway)
-      puts
-      puts "✓ AiGateway method restored"
+      # Restore original AiGateway method (only if we mocked it)
+      unless use_real_api
+        Ai::AiGateway.define_singleton_method(:call, original_ai_gateway)
+        puts
+        puts "✓ AiGateway method restored"
+      end
     end
   end
 end
+
