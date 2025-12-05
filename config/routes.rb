@@ -10,6 +10,13 @@ Rails.application.routes.draw do
     get "test_tenant" => "test_tenant#show"
   end
 
+  # API routes
+  namespace :api do
+    namespace :v1 do
+      post "chat", to: "chat#create"
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

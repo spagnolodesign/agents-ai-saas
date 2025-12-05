@@ -13,3 +13,4 @@ class UpdateConversationsForStep7 < ActiveRecord::Migration[7.2]
     change_column_default :conversations, :status, from: nil, to: "active"
   end
 end
+

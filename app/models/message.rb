@@ -9,3 +9,4 @@ class Message < ApplicationRecord
   # JSONB metadata field
   # Use string keys for JSONB fields
 end
+

@@ -8,6 +8,9 @@ class TenantResolver
   def call(env)
     request = ActionDispatch::Request.new(env)
     subdomain = extract_subdomain(request.host)
+    
+    # Fallback to X-Subdomain header if no subdomain in host (useful for frontend)
+    subdomain ||= request.headers["X-Subdomain"].presence
 
     if subdomain.present?
       brand = Brand.find_by(subdomain: subdomain)

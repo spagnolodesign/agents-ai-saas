@@ -14,7 +14,9 @@ module Workflows
 
     register("ask", Workflows::Steps::AskStep)
     register("ai", Workflows::Steps::AiStep)
+    register("chat", Workflows::Steps::ChatStep)
     register("save", Workflows::Steps::SaveStep)
+    register("response", Workflows::Steps::ResponseStep)
     register("notify", Workflows::Steps::NotifyStep)
     register("calendar_sync", Workflows::Steps::CalendarSyncStep)
     register("branch", Workflows::Steps::BranchStep)

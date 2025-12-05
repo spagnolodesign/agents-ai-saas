@@ -12,5 +12,5 @@ class Conversation < ApplicationRecord
 
   # JSONB field for workflow context persistence
   # Stores WorkflowContext state as JSON
-  serialize :workflow_context, coder: JSON if respond_to?(:serialize)
+  # Note: JSONB columns don't need serialize - they handle JSON natively
 end

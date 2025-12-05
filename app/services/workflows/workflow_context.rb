@@ -11,11 +11,21 @@ module Workflows
     attr_accessor :state, :current_step_index, :customer, :outputs, :errors
 
     def initialize(initial_state = {})
-      @state = initial_state
-      @current_step_index = 0
-      @customer = nil
-      @outputs = []
-      @errors = []
+      if initial_state.is_a?(Hash) && initial_state.key?("state")
+        # Restore from persisted hash
+        @state = initial_state["state"] || {}
+        @current_step_index = initial_state["current_step_index"] || 0
+        @customer = nil # Will be set separately
+        @outputs = initial_state["outputs"] || []
+        @errors = initial_state["errors"] || []
+      else
+        # Initialize from state hash directly
+        @state = initial_state.is_a?(Hash) ? initial_state : {}
+        @current_step_index = 0
+        @customer = nil
+        @outputs = []
+        @errors = []
+      end
     end
 
     def set(key, value)
@@ -32,6 +42,15 @@ module Workflows
 
     def halt!
       @state["halted"] = true
+    end
+
+    def to_h
+      {
+        "state" => @state,
+        "current_step_index" => @current_step_index,
+        "errors" => @errors,
+        "outputs" => @outputs
+      }
     end
   end
 end
