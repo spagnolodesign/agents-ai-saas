@@ -54,7 +54,7 @@ RSpec.describe Workflow, type: :model do
         { 'type' => 'process_response', 'action' => 'extract_info' }
       ]
       workflow = create(:workflow, brand: brand, steps: steps)
-      
+
       expect(workflow.steps).to eq(steps)
       expect(workflow.steps).to be_an(Array)
       expect(workflow.steps.first['type']).to eq('send_message')
@@ -70,13 +70,13 @@ RSpec.describe Workflow, type: :model do
     it 'is tenant-scoped' do
       brand1 = create(:brand, subdomain: 'brand1')
       brand2 = create(:brand, subdomain: 'brand2')
-      
+
       ActsAsTenant.current_tenant = brand1
       workflow1 = create(:workflow, brand: brand1)
-      
+
       ActsAsTenant.current_tenant = brand2
       workflow2 = create(:workflow, brand: brand2)
-      
+
       ActsAsTenant.current_tenant = brand1
       expect(Workflow.all).to contain_exactly(workflow1)
     end

@@ -13,8 +13,8 @@ class CreateBookings < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :bookings, [:brand_id, :customer_id]
-    add_index :bookings, [:brand_id, :status]
-    add_index :bookings, [:brand_id, :date]
+    add_index :bookings, [ :brand_id, :customer_id ]
+    add_index :bookings, [ :brand_id, :status ]
+    add_index :bookings, [ :brand_id, :date ]
   end
 end

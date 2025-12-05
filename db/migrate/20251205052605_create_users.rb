@@ -11,6 +11,6 @@ class CreateUsers < ActiveRecord::Migration[7.2]
     end
 
     # Email unique per brand (tenant-scoped uniqueness)
-    add_index :users, [:brand_id, :email], unique: true
+    add_index :users, [ :brand_id, :email ], unique: true
   end
 end

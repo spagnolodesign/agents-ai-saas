@@ -53,16 +53,16 @@ RSpec.describe Customer, type: :model do
     it 'is tenant-scoped' do
       brand1 = create(:brand, subdomain: 'brand1')
       brand2 = create(:brand, subdomain: 'brand2')
-      
+
       ActsAsTenant.current_tenant = brand1
       customer1 = create(:customer, brand: brand1)
-      
+
       ActsAsTenant.current_tenant = brand2
       customer2 = create(:customer, brand: brand2)
-      
+
       ActsAsTenant.current_tenant = brand1
       expect(Customer.all).to contain_exactly(customer1)
-      
+
       ActsAsTenant.current_tenant = brand2
       expect(Customer.all).to contain_exactly(customer2)
     end

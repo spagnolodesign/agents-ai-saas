@@ -10,4 +10,3 @@ class TestTenantController < ApplicationController
     }
   end
 end
-

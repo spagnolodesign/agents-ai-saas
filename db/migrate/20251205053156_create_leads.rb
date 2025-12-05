@@ -9,7 +9,7 @@ class CreateLeads < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :leads, [:brand_id, :customer_id]
-    add_index :leads, [:brand_id, :status]
+    add_index :leads, [ :brand_id, :customer_id ]
+    add_index :leads, [ :brand_id, :status ]
   end
 end

@@ -54,7 +54,7 @@ RSpec.describe Booking, type: :model do
     it 'accepts jsonb values for metadata' do
       metadata = { 'source' => 'web', 'campaign' => 'summer2024', 'discount' => 10 }
       booking = create(:booking, brand: brand, customer: customer, metadata: metadata)
-      
+
       expect(booking.metadata).to eq(metadata)
       expect(booking.metadata['source']).to eq('web')
     end
@@ -71,13 +71,13 @@ RSpec.describe Booking, type: :model do
       brand2 = create(:brand, subdomain: 'brand2')
       customer1 = create(:customer, brand: brand1)
       customer2 = create(:customer, brand: brand2)
-      
+
       ActsAsTenant.current_tenant = brand1
       booking1 = create(:booking, brand: brand1, customer: customer1)
-      
+
       ActsAsTenant.current_tenant = brand2
       booking2 = create(:booking, brand: brand2, customer: customer2)
-      
+
       ActsAsTenant.current_tenant = brand1
       expect(Booking.all).to contain_exactly(booking1)
     end

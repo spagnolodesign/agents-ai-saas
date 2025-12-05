@@ -11,7 +11,7 @@ RSpec.describe 'Tenant Resolution', type: :request do
 
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
-        
+
         expect(json_response['brand_id']).to eq(test_brand.id)
         expect(json_response['brand_name']).to eq('Test Brand')
         expect(json_response['brand_subdomain']).to eq('testbrand')
@@ -24,7 +24,7 @@ RSpec.describe 'Tenant Resolution', type: :request do
 
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
-        
+
         expect(json_response['brand_id']).to be_nil
         expect(json_response['brand_name']).to be_nil
       end
@@ -62,7 +62,7 @@ RSpec.describe 'Tenant Resolution', type: :request do
 
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
-        
+
         expect(json_response['brand_id']).to eq(test_brand.id)
         expect(json_response['brand_name']).to eq('Test Brand')
         expect(json_response['brand_subdomain']).to eq('testbrand')

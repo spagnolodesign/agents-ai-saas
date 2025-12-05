@@ -9,6 +9,6 @@ class CreateWorkflows < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :workflows, [:brand_id, :enabled]
+    add_index :workflows, [ :brand_id, :enabled ]
   end
 end

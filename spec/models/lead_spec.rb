@@ -54,13 +54,13 @@ RSpec.describe Lead, type: :model do
       brand2 = create(:brand, subdomain: 'brand2')
       customer1 = create(:customer, brand: brand1)
       customer2 = create(:customer, brand: brand2)
-      
+
       ActsAsTenant.current_tenant = brand1
       lead1 = create(:lead, brand: brand1, customer: customer1)
-      
+
       ActsAsTenant.current_tenant = brand2
       lead2 = create(:lead, brand: brand2, customer: customer2)
-      
+
       ActsAsTenant.current_tenant = brand1
       expect(Lead.all).to contain_exactly(lead1)
     end

@@ -10,8 +10,8 @@ class CreateConversations < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :conversations, [:brand_id, :customer_id]
-    add_index :conversations, [:brand_id, :status]
+    add_index :conversations, [ :brand_id, :customer_id ]
+    add_index :conversations, [ :brand_id, :status ]
     add_index :conversations, :last_message_at
   end
 end

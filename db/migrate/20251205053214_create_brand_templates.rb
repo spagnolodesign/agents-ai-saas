@@ -9,6 +9,6 @@ class CreateBrandTemplates < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :brand_templates, [:brand_id, :template_id], unique: true
+    add_index :brand_templates, [ :brand_id, :template_id ], unique: true
   end
 end

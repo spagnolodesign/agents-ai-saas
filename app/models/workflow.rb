@@ -6,5 +6,5 @@ class Workflow < ApplicationRecord
 
   # Validations
   validates :name, presence: true
-  validates :enabled, inclusion: { in: [true, false] }
+  validates :enabled, inclusion: { in: [ true, false ] }
 end

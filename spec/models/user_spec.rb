@@ -28,7 +28,7 @@ RSpec.describe User, type: :model do
       # Database constraint enforces brand_id presence (null: false)
       ActsAsTenant.current_tenant = nil
       user = User.new(user_attributes.except(:brand_id, :brand))
-      
+
       # The brand association is required
       expect(user.brand).to be_nil
       # When saving, it will fail due to database constraint or association requirement
@@ -44,7 +44,7 @@ RSpec.describe User, type: :model do
     it 'validates email uniqueness scoped to brand' do
       create(:user, email: 'test@example.com', brand: brand)
       duplicate_user = build(:user, email: 'test@example.com', brand: brand)
-      
+
       expect(duplicate_user).not_to be_valid
       expect(duplicate_user.errors[:email]).to include("has already been taken")
     end
@@ -53,7 +53,7 @@ RSpec.describe User, type: :model do
       brand2 = create(:brand, subdomain: 'brand2')
       create(:user, email: 'test@example.com', brand: brand)
       user2 = build(:user, email: 'test@example.com', brand: brand2)
-      
+
       expect(user2).to be_valid
     end
   end
@@ -69,17 +69,17 @@ RSpec.describe User, type: :model do
     it 'is tenant-scoped' do
       brand1 = create(:brand, subdomain: 'brand1')
       brand2 = create(:brand, subdomain: 'brand2')
-      
+
       ActsAsTenant.current_tenant = brand1
       user1 = create(:user, brand: brand1)
-      
+
       ActsAsTenant.current_tenant = brand2
       user2 = create(:user, brand: brand2)
-      
+
       # When tenant is brand1, only user1 should be visible
       ActsAsTenant.current_tenant = brand1
       expect(User.all).to contain_exactly(user1)
-      
+
       # When tenant is brand2, only user2 should be visible
       ActsAsTenant.current_tenant = brand2
       expect(User.all).to contain_exactly(user2)

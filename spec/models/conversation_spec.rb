@@ -40,9 +40,9 @@ RSpec.describe Conversation, type: :model do
 
   describe 'jsonb fields' do
     it 'accepts jsonb values for messages' do
-      messages = [{ 'role' => 'user', 'content' => 'Hello' }, { 'role' => 'assistant', 'content' => 'Hi there' }]
+      messages = [ { 'role' => 'user', 'content' => 'Hello' }, { 'role' => 'assistant', 'content' => 'Hi there' } ]
       conversation = create(:conversation, brand: brand, customer: customer, messages: messages)
-      
+
       expect(conversation.messages).to eq(messages)
       expect(conversation.messages).to be_an(Array)
     end
@@ -59,13 +59,13 @@ RSpec.describe Conversation, type: :model do
       brand2 = create(:brand, subdomain: 'brand2')
       customer1 = create(:customer, brand: brand1)
       customer2 = create(:customer, brand: brand2)
-      
+
       ActsAsTenant.current_tenant = brand1
       conversation1 = create(:conversation, brand: brand1, customer: customer1)
-      
+
       ActsAsTenant.current_tenant = brand2
       conversation2 = create(:conversation, brand: brand2, customer: customer2)
-      
+
       ActsAsTenant.current_tenant = brand1
       expect(Conversation.all).to contain_exactly(conversation1)
     end

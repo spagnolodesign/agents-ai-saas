@@ -42,7 +42,7 @@ RSpec.describe Template, type: :model do
         ]
       }
       template = create(:template, workflow_definition: workflow_definition)
-      
+
       expect(template.workflow_definition).to eq(workflow_definition)
       expect(template.workflow_definition['steps']).to be_an(Array)
     end
@@ -57,13 +57,13 @@ RSpec.describe Template, type: :model do
     it 'is NOT tenant-scoped' do
       brand1 = create(:brand, subdomain: 'brand1')
       brand2 = create(:brand, subdomain: 'brand2')
-      
+
       ActsAsTenant.current_tenant = brand1
       template1 = create(:template)
-      
+
       ActsAsTenant.current_tenant = brand2
       template2 = create(:template)
-      
+
       # Templates should be visible regardless of tenant
       ActsAsTenant.current_tenant = brand1
       expect(Template.all).to include(template1, template2)

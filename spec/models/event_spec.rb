@@ -39,7 +39,7 @@ RSpec.describe Event, type: :model do
         'metadata' => { 'source' => 'web', 'ip' => '192.168.1.1' }
       }
       event = create(:event, brand: brand, payload: payload)
-      
+
       expect(event.payload).to eq(payload)
       expect(event.payload['action']).to eq('conversation_started')
       expect(event.payload['metadata']).to be_a(Hash)
@@ -55,13 +55,13 @@ RSpec.describe Event, type: :model do
     it 'is tenant-scoped' do
       brand1 = create(:brand, subdomain: 'brand1')
       brand2 = create(:brand, subdomain: 'brand2')
-      
+
       ActsAsTenant.current_tenant = brand1
       event1 = create(:event, brand: brand1)
-      
+
       ActsAsTenant.current_tenant = brand2
       event2 = create(:event, brand: brand2)
-      
+
       ActsAsTenant.current_tenant = brand1
       expect(Event.all).to contain_exactly(event1)
     end

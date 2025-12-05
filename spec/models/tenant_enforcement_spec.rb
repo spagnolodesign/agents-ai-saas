@@ -127,4 +127,3 @@ RSpec.describe 'Tenant Enforcement', type: :model do
     end
   end
 end
-

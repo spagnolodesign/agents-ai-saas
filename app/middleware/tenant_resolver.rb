@@ -46,4 +46,3 @@ class TenantResolver
     subdomain.presence
   end
 end
-
