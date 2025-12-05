@@ -32,6 +32,7 @@ gem "sidekiq"
 gem "rubocop", require: false
 gem "rubocop-rails", require: false
 gem "acts_as_tenant"
+gem "ruby-openai"
 
 
 group :development, :test do
