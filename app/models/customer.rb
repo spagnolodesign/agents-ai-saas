@@ -12,4 +12,5 @@ class Customer < ApplicationRecord
   # Validations
   validates :name, presence: true
   validates :email, presence: true
+  validates :codice_fiscale, format: { with: /\A[A-Z0-9]{16}\z/i }, allow_blank: true
 end

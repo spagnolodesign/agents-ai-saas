@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_05_053227) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_05_053248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,6 +84,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_05_053227) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "codice_fiscale"
+    t.index ["brand_id", "codice_fiscale"], name: "index_customers_on_brand_id_and_codice_fiscale"
     t.index ["brand_id", "email"], name: "index_customers_on_brand_id_and_email"
     t.index ["brand_id"], name: "index_customers_on_brand_id"
   end
@@ -100,6 +102,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_05_053227) do
     t.index ["brand_id"], name: "index_events_on_brand_id"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "brand_id", null: false
+    t.bigint "booking_id", null: false
+    t.bigint "payment_id", null: false
+    t.string "number"
+    t.string "pdf_url"
+    t.string "status"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_invoices_on_booking_id"
+    t.index ["brand_id", "number"], name: "index_invoices_on_brand_id_and_number", unique: true
+    t.index ["brand_id", "status"], name: "index_invoices_on_brand_id_and_status"
+    t.index ["brand_id"], name: "index_invoices_on_brand_id"
+    t.index ["payment_id"], name: "index_invoices_on_payment_id"
+  end
+
   create_table "leads", force: :cascade do |t|
     t.bigint "brand_id", null: false
     t.bigint "customer_id", null: false
@@ -111,6 +130,25 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_05_053227) do
     t.index ["brand_id", "status"], name: "index_leads_on_brand_id_and_status"
     t.index ["brand_id"], name: "index_leads_on_brand_id"
     t.index ["customer_id"], name: "index_leads_on_customer_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "brand_id", null: false
+    t.bigint "booking_id", null: false
+    t.string "stripe_payment_intent_id"
+    t.string "stripe_checkout_session_id"
+    t.decimal "amount", precision: 10, scale: 2
+    t.string "currency", default: "eur"
+    t.string "status"
+    t.string "payment_url"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_payments_on_booking_id"
+    t.index ["brand_id", "booking_id"], name: "index_payments_on_brand_id_and_booking_id"
+    t.index ["brand_id", "status"], name: "index_payments_on_brand_id_and_status"
+    t.index ["brand_id", "stripe_payment_intent_id"], name: "index_payments_on_brand_id_and_stripe_payment_intent_id"
+    t.index ["brand_id"], name: "index_payments_on_brand_id"
   end
 
   create_table "templates", force: :cascade do |t|
@@ -153,8 +191,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_05_053227) do
   add_foreign_key "conversations", "customers"
   add_foreign_key "customers", "brands"
   add_foreign_key "events", "brands"
+  add_foreign_key "invoices", "bookings"
+  add_foreign_key "invoices", "brands"
+  add_foreign_key "invoices", "payments"
   add_foreign_key "leads", "brands"
   add_foreign_key "leads", "customers"
+  add_foreign_key "payments", "bookings"
+  add_foreign_key "payments", "brands"
   add_foreign_key "users", "brands"
   add_foreign_key "workflows", "brands"
 end

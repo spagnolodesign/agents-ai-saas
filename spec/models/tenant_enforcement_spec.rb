@@ -15,6 +15,8 @@ RSpec.describe 'Tenant Enforcement', type: :model do
       lead_a = create(:lead, brand: brand_a, customer: customer_a)
       workflow_a = create(:workflow, brand: brand_a)
       event_a = create(:event, brand: brand_a)
+      payment_a = create(:payment, brand: brand_a, booking: booking_a)
+      invoice_a = create(:invoice, brand: brand_a, booking: booking_a, payment: payment_a)
 
       # Switch to brand B
       ActsAsTenant.current_tenant = brand_b
@@ -27,6 +29,8 @@ RSpec.describe 'Tenant Enforcement', type: :model do
       expect(Lead.find_by(id: lead_a.id)).to be_nil
       expect(Workflow.find_by(id: workflow_a.id)).to be_nil
       expect(Event.find_by(id: event_a.id)).to be_nil
+      expect(Payment.find_by(id: payment_a.id)).to be_nil
+      expect(Invoice.find_by(id: invoice_a.id)).to be_nil
 
       # Querying all records should return empty
       expect(User.all).to be_empty
@@ -36,6 +40,8 @@ RSpec.describe 'Tenant Enforcement', type: :model do
       expect(Lead.all).to be_empty
       expect(Workflow.all).to be_empty
       expect(Event.all).to be_empty
+      expect(Payment.all).to be_empty
+      expect(Invoice.all).to be_empty
     end
 
     it 'allows access to records within the same tenant' do
@@ -124,6 +130,44 @@ RSpec.describe 'Tenant Enforcement', type: :model do
 
       ActsAsTenant.current_tenant = brand_b
       expect(Workflow.all).to contain_exactly(workflow_b)
+    end
+
+    it 'scopes Payment queries to current tenant' do
+      ActsAsTenant.current_tenant = brand_a
+      customer_a = create(:customer, brand: brand_a)
+      booking_a = create(:booking, brand: brand_a, customer: customer_a)
+      payment_a = create(:payment, brand: brand_a, booking: booking_a)
+
+      ActsAsTenant.current_tenant = brand_b
+      customer_b = create(:customer, brand: brand_b)
+      booking_b = create(:booking, brand: brand_b, customer: customer_b)
+      payment_b = create(:payment, brand: brand_b, booking: booking_b)
+
+      ActsAsTenant.current_tenant = brand_a
+      expect(Payment.all).to contain_exactly(payment_a)
+
+      ActsAsTenant.current_tenant = brand_b
+      expect(Payment.all).to contain_exactly(payment_b)
+    end
+
+    it 'scopes Invoice queries to current tenant' do
+      ActsAsTenant.current_tenant = brand_a
+      customer_a = create(:customer, brand: brand_a)
+      booking_a = create(:booking, brand: brand_a, customer: customer_a)
+      payment_a = create(:payment, brand: brand_a, booking: booking_a)
+      invoice_a = create(:invoice, brand: brand_a, booking: booking_a, payment: payment_a)
+
+      ActsAsTenant.current_tenant = brand_b
+      customer_b = create(:customer, brand: brand_b)
+      booking_b = create(:booking, brand: brand_b, customer: customer_b)
+      payment_b = create(:payment, brand: brand_b, booking: booking_b)
+      invoice_b = create(:invoice, brand: brand_b, booking: booking_b, payment: payment_b)
+
+      ActsAsTenant.current_tenant = brand_a
+      expect(Invoice.all).to contain_exactly(invoice_a)
+
+      ActsAsTenant.current_tenant = brand_b
+      expect(Invoice.all).to contain_exactly(invoice_b)
     end
   end
 end
